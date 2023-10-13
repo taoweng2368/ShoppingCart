@@ -31,13 +31,13 @@ However, this is not just for students, but for everybody.
 
 ## User Stories
 
-* As a user, I want to be able to search for groceries, by searching groceries by types, or just typing the name
-* As a user, I want to be able to click into grocery that I want to buy
-* As a user, I want to be able to see a list of stores that have that specific grocery <=== LIST
-* As a user, I want to be able to see the store's price for that grocery, store's location, store's reviews
+* As a user, I want to be able to click the desired grocery type that I want to buy.
+* As a user, I want to be able to select the store I want that groceries from.
+* As a user, I want to be able to see a list of groceries from the store, and select the one that I want to buy.
+* As a user, I want to be able to see the store's price for that grocery.
 * As a user, I want to be able to select my desired grocery and add it to my shopping cart
 * As a user, I want to be able to view all my selected groceries in my shopping cart
-* As a user, I want to be able to delete selected groceries from my shopping cart
+* As a user, I want to be able to delete/remove selected groceries from my shopping cart
 
 
   

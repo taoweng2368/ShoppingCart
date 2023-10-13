@@ -1,51 +1,43 @@
 package ui;
 
-import model.Groceries;
+import model.Grocery;
 import model.ShoppingCart;
 import model.Store;
-
+import java.util.List;
 import java.util.Scanner;
 
-// Shopping cart application
+
+// Shopping cart application inspired by TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
 public class App {
     // Shopping Cart
     private ShoppingCart cart;
-
-    // Produce
-    private Groceries banana;
-    private Groceries apple;
-    private Groceries cabbage;
-
-    // Deli
-    private Groceries pork;
-    private Groceries beef;
-    private Groceries chicken;
-
-    // Dairy
-    private Groceries milk;
-    private Groceries eggs;
-    private Groceries yogurt;
-
-    // Store
+    // stores
     private Store walmart;
     private Store tnt;
     private Store superstore;
-
     // Inputs
     private Scanner input;
 
+    // Assign the method to a variable
+    private Store selectedstore;
 
 
     // EFFECTS: run the Shopping cart application
     public App() {
+        cart = new ShoppingCart();
+        walmart = new Store("Walmart");
+        tnt = new Store("T&T");
+        superstore = new Store("Superstore");
         runApp();
     }
 
+    // MODIFIES: this
+    // EFFECTS: complements the App method to start cart application
     private void runApp() {
         boolean keepGoing = true;
         String command = null;
 
-        init();
+        initOverall();
 
         while (keepGoing) {
             displayMenu();
@@ -62,21 +54,55 @@ public class App {
     }
 
     // MODIFIES: this
-    // EFFECTS: initialize stores and groceries
-    private void init() {
-
-        // Inputs
+    // EFFECTS: initialize Groceries in Walmart
+    private void initOverall() {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
+        initWalmart();
+        initTnt();
+        initSuperstore();
     }
 
+    // MODIFIES: this
+    // EFFECTS: initialize Groceries in Walmart
+    private void initWalmart() {
+
+        walmart.addGrocery(new Grocery("Banana", "Produce", 0.69));
+        walmart.addGrocery(new Grocery("Apple", "Produce", 1.50));
+        walmart.addGrocery(new Grocery("Cabbage", "Produce", 1.49));
+        walmart.addGrocery(new Grocery("Pork", "Deli", 5.99));
+        walmart.addGrocery(new Grocery("Beef", "Deli", 5.99));
+        walmart.addGrocery(new Grocery("Chicken", "Deli", 5.99));
+        walmart.addGrocery(new Grocery("Milk", "Dairy", 5.49));
+        walmart.addGrocery(new Grocery("Eggs", "Dairy", 11.49));
+        walmart.addGrocery(new Grocery("Yogurt", "Dairy", 6.59));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initialize Groceries in Tnt
+    private void initTnt() {
+        tnt.addGrocery(new Grocery("Banana", "Produce", 0.59));
+        tnt.addGrocery(new Grocery("Apple", "Produce", 1.20));
+        tnt.addGrocery(new Grocery("Cabbage", "Produce", 1.59));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initialize Groceries in Superstore
+    private void initSuperstore() {
+
+    }
+
+
+    // MODIFIES: this
     // EFFECTS: displays menu of grocery type options to user
     private void displayMenu() {
         System.out.println("\nplease select the following grocery options:");
         System.out.println("\ta -> Produce");
         System.out.println("\tb -> Deli");
         System.out.println("\tc -> Dairy");
-        System.out.println("\tq -> quit");
+        System.out.println("\tv -> View Shopping Cart");
+        System.out.println("\tr -> Remove Items from Shopping Cart");
+        System.out.println("\tq -> Quit App");
     }
 
 
@@ -84,123 +110,132 @@ public class App {
     // EFFECTS: processes user command
     private void processCommand(String command) {
         if (command.equals("a")) {
-            doProduce();
+            selectGroceries("Produce");
         } else if (command.equals("b")) {
-            doDeli();
+            selectGroceries("Deli");
         } else if (command.equals("c")) {
-            doDairy();
+            selectGroceries("Dairy");
+        } else if (command.equals("v")) {
+            viewShoppingCart();
+        } else if (command.equals("r")) {
+            removeFromShoppingCart();
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("Invalid choice. ");
         }
     }
 
-    // EFFECTS: go into Produce selection of groceries
-    private void doProduce() {
-        selectProduce();
-    }
+    private void selectGroceries(String grocerytype) {
+        selectedstore = selectStore();
 
-    // EFFECTS: go into T&T's selection of groceries
-    private void doDeli() {
-        selectDeli();
-    }
+        if (selectedstore != null) {
+            List<Grocery> availableGroceries = selectedstore.getGroceriesByType(grocerytype);
+            if (availableGroceries.isEmpty()) {
+                System.out.println("No " + grocerytype + " items are in stock in "
+                        + selectedstore.getStoreName() + " at the moment. Sorry for your inconvenience");
+            } else {
+                displayGroceries(availableGroceries);
+                addToCart(availableGroceries);
+            }
+        } else {
+            System.out.println("Store not found.");
 
-    // EFFECTS: go into Superstore's selection of groceries
-    private void doDairy() {
-        selectDairy();
-    }
 
-    private void doStore() {
-        selectStore();
+        }
     }
 
     private Store selectStore() {
         String selection = "";
 
         while (!(selection.equals("a") || selection.equals("b") || selection.equals("c"))) {
-            System.out.println("\nplease select one of the following stores:");
+            System.out.println("Please select a store");
             System.out.println("\ta -> Walmart");
             System.out.println("\tb -> T&T");
             System.out.println("\tc -> Superstore");
             selection = input.next();
             selection = selection.toLowerCase();
-        }
 
-        if (selection.equals("a")) {
-            return walmart;
-        } else if (selection.equals("b")) {
-            return tnt;
-        } else {
-            return superstore;
+            switch (selection) {
+                case "a":
+                    return walmart;
+
+                case "b":
+                    return tnt;
+
+                case "c":
+                    return superstore;
+
+                default:
+                    return null;
+            }
+
         }
+        return null;
     }
 
-    //EFFECTS: prompts user to select the following Produce groceries and return it
-    private void selectProduce() {
-        String selection = "";
 
-        while (!(selection.equals("a") || selection.equals("b") || selection.equals("c"))) {
-            System.out.println("\nplease select one of the following:");
-            System.out.println("\ta -> banana");
-            System.out.println("\tb -> apple");
-            System.out.println("\tc -> cabbage");
-            selection = input.next();
-            selection = selection.toLowerCase();
-        }
 
-        if (selection.equals("a")) {
-            doStore();
-        } else if (selection.equals("b")) {
-            doStore();
-        } else {
-            doStore();
+    private void displayGroceries(List<Grocery> groceries) {
+        System.out.println("Here are the available groceries in " + selectedstore.getStoreName());
+        int i = 1;
+        for (Grocery item : groceries) {
+            System.out.println(i + ". " + item.getName() + "- $" + item.getPrice());
+            i++;
         }
     }
 
 
 
-    //EFFECTS: prompts user to select the following Deli groceries and return it
-    private void selectDeli() {
-        String selection = "";
-
-        while (!(selection.equals("a") || selection.equals("b") || selection.equals("c"))) {
-            System.out.println("\nplease select one of the following:");
-            System.out.println("\ta -> pork");
-            System.out.println("\tb -> beef");
-            System.out.println("\tc -> chicken");
-            selection = input.next();
-            selection = selection.toLowerCase();
+    private void addToCart(List<Grocery> groceries) {
+        System.out.println("Please select grocery to add to your cart (0 to cancel):");
+        int choice = input.nextInt();
+        if (choice >= 1 && choice <= groceries.size()) {
+            Grocery selectedGrocery = groceries.get(choice - 1); // zero-based indexing
+            cart.addItem(selectedGrocery);
+            selectedGrocery.setStore(selectedstore);
+            System.out.println(selectedGrocery.getName() + " added to your shopping cart.");
+        } else if (choice != 0) {
+            System.out.println("Invalid choice.");
         }
 
-        if (selection.equals("a")) {
-            doStore();
-        } else if (selection.equals("b")) {
-            doStore();
+    }
+
+    private void viewShoppingCart() {
+
+        List<Grocery> items = cart.getItems();
+
+        if (items.isEmpty()) {
+            System.out.println("Your shopping cart is empty");
         } else {
-            doStore();
+            System.out.println("Items in your shopping cart:");
+            int i = 1;
+            for (Grocery item : items) {
+                System.out.println(i + ". " + item.getName() + " - $" + item.getPrice() + " from "
+                        + item.getStore().getStoreName());
+                i++;
+            }
         }
     }
 
-    //EFFECTS: prompts user to select the following Dairy groceries and return it
-    private void selectDairy() {
-        String selection = "";
 
-        while (!(selection.equals("a") || selection.equals("b") || selection.equals("c"))) {
-            System.out.println("\nplease select one of the following:");
-            System.out.println("\ta -> milk");
-            System.out.println("\tb -> eggs");
-            System.out.println("\tc -> yogurt");
-            selection = input.next();
-            selection = selection.toLowerCase();
-        }
+    private void removeFromShoppingCart() {
+        List<Grocery> items = cart.getItems();
 
-        if (selection.equals("a")) {
-            doStore();
-        } else if (selection.equals("b")) {
-            doStore();
+        System.out.println("Select the item you wish to remove from your cart (0 to cancel):");
+        viewShoppingCart();
+        int choice = input.nextInt();
+        if (items.isEmpty()) {
+            System.out.println("Your shopping cart is empty");
+
+        } else if (choice >= 1 && choice <= items.size()) {
+            Grocery selectedGrocery = items.get(choice - 1);
+            cart.removeItem(selectedGrocery);
+            System.out.println(selectedGrocery.getName() + " is removed from your shopping cart.");
         } else {
-            doStore();
+            System.out.println("Item not found in your cart.");
+
         }
     }
+
 }
 
 
