@@ -19,7 +19,7 @@ public class Store {
     }
 
     // MODIFIES: this
-    // EFFECTS: get groceries by their type and add it to a list
+    // EFFECTS: return a list of all groceries in the specific type from the store's inventory
     public List<Grocery> getGroceriesByType(String type) {
         List<Grocery> result = new ArrayList<>();
         for (Grocery grocery : inventory) {

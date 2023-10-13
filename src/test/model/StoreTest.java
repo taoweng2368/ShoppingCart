@@ -81,7 +81,13 @@ public class StoreTest {
         walmart.addGrocery(Yogurt);
         List<Grocery> dairyGroceries = walmart.getGroceriesByType("Dairy");
         assertEquals(2, dairyGroceries.size());
+    }
 
 
+    // Test for null type of groceries
+    @Test
+    public void testGetGroceriesByNullType() {
+        List<Grocery> nullGroceries = walmart.getGroceriesByType("Null");
+        assertEquals(0,nullGroceries.size());
     }
 }
