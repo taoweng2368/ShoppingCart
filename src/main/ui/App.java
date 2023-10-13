@@ -89,7 +89,9 @@ public class App {
     // MODIFIES: this
     // EFFECTS: initialize Groceries in Superstore
     private void initSuperstore() {
-
+        superstore.addGrocery(new Grocery("Pork", "Deli", 5.99));
+        superstore.addGrocery(new Grocery("Beef", "Deli", 5.99));
+        superstore.addGrocery(new Grocery("Chicken", "Deli", 5.99));
     }
 
 
@@ -109,18 +111,25 @@ public class App {
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
-        if (command.equals("a")) {
-            selectGroceries("Produce");
-        } else if (command.equals("b")) {
-            selectGroceries("Deli");
-        } else if (command.equals("c")) {
-            selectGroceries("Dairy");
-        } else if (command.equals("v")) {
-            viewShoppingCart();
-        } else if (command.equals("r")) {
-            removeFromShoppingCart();
-        } else {
-            System.out.println("Invalid choice. ");
+        switch (command) {
+            case "a":
+                selectGroceries("Produce");
+                break;
+            case "b":
+                selectGroceries("Deli");
+                break;
+            case "c":
+                selectGroceries("Dairy");
+                break;
+            case "v":
+                viewShoppingCart();
+                break;
+            case "r":
+                removeFromShoppingCart();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again. ");
+                break;
         }
     }
 
@@ -157,19 +166,15 @@ public class App {
             switch (selection) {
                 case "a":
                     return walmart;
-
                 case "b":
                     return tnt;
-
                 case "c":
                     return superstore;
-
                 default:
-                    return null;
+                    System.out.println("Invalid choice. Please select again.");;
             }
-
         }
-        return null;
+        return selectStore();
     }
 
 
