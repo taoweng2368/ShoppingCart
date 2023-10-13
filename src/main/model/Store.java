@@ -7,6 +7,8 @@ public class Store {
     private String name; //name of the store
     private List<Grocery> inventory;  // inventory of the groceries in the store
 
+
+    // EFFECTS: creates a store with the following arguments
     public Store(String name) {
         this.name = name;
         this.inventory = new ArrayList<>();

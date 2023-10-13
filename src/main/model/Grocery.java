@@ -15,15 +15,14 @@ public class Grocery {
         this.type = type;
     }
 
+
     public String getName() {
         return name;
     }
 
-    // Method to get the price at a specific store
     public double getPrice() {
         return price;
     }
-
 
     public String getType() {
         return type;

@@ -58,6 +58,7 @@ class ShoppingCartTest {
         assertEquals(0,cart1.getItems().size());
     }
 
+    // Test for removing multiple items
     @Test
     public void testRemoveItems() {
         cart1.addItem(Banana);

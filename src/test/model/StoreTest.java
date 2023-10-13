@@ -91,6 +91,7 @@ public class StoreTest {
         assertEquals(0,nullGroceries.size());
     }
 
+    // Test for getting groceries not by the same type
     @Test
     public void testGetGroceriesButNotEqualSameType() {
         walmart.addGrocery(Milk);
