@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 
 // Shopping cart application inspired by TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
-public class App {
+public class GroceryLyticsApp {
     // Shopping Cart
     private ShoppingCart cart;
     // stores
@@ -23,7 +23,7 @@ public class App {
 
 
     // EFFECTS: run the Shopping cart application
-    public App() {
+    public GroceryLyticsApp() {
         cart = new ShoppingCart();
         walmart = new Store("Walmart");
         tnt = new Store("T&T");
@@ -237,7 +237,7 @@ public class App {
     // REQUIRES: input = int
     // MODIFIES: this
     // EFFECTS: Remove a selected item from the shopping cart
-    //         - if the cart is empty, say "the cart is empty"
+    //         - if the cart is empty, say "the cart is empty" and prompt the user to buy
     //         - if the cart is not empty, user chooses the grocery to remove
     //         - otherwise, say "no item found in cart" and user try again
     private void removeFromShoppingCart() {
