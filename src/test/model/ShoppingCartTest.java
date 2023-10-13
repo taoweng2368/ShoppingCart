@@ -27,6 +27,7 @@ class ShoppingCartTest {
         tnt = new Store("T&T");
     }
 
+    // Test for the constructor
     @Test
     public void testConstructor() {
         assertEquals(0, cart1.getItems().size());

@@ -12,10 +12,14 @@ public class Store {
         this.inventory = new ArrayList<>();
     }
 
+    // MODIFIES: this
+    // EFFECTS: add grocery to the store inventory
     public void addGrocery(Grocery grocery) {
         inventory.add(grocery);
     }
 
+    // MODIFIES: this
+    // EFFECTS: get groceries by their type and add it to a list
     public List<Grocery> getGroceriesByType(String type) {
         List<Grocery> result = new ArrayList<>();
         for (Grocery grocery : inventory) {

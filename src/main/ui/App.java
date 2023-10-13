@@ -54,7 +54,7 @@ public class App {
     }
 
     // MODIFIES: this
-    // EFFECTS: initialize Groceries in Walmart
+    // EFFECTS: initialize the scanner and all store's groceries
     private void initOverall() {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
@@ -132,6 +132,7 @@ public class App {
                 break;
         }
     }
+
 
     private void selectGroceries(String grocerytype) {
         selectedstore = selectStore();
