@@ -18,7 +18,7 @@ public class App {
     // Inputs
     private Scanner input;
 
-    // Assign the method to a variable
+
     private Store selectedstore;
 
 
@@ -134,6 +134,11 @@ public class App {
     }
 
 
+    //MODIFIES: this
+    //EFFECTS: Allow users to select groceries from the selected store and add them to their cart
+    //              - if a store is selected correctly, it will give back a list of groceries available in that store
+    //              - user is then given the option to add the selected grocery to the cart
+    //              - otherwise say "invalid selection and please select again"
     private void selectGroceries(String grocerytype) {
         selectedstore = selectStore();
 
@@ -144,15 +149,13 @@ public class App {
                         + selectedstore.getStoreName() + " at the moment. Sorry for your inconvenience");
             } else {
                 displayGroceries(availableGroceries);
-                addToCart(availableGroceries);
+                addToShoppingCart(availableGroceries);
             }
-        } else {
-            System.out.println("Store not found.");
-
-
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: Allow the user to select a desired store to buy groceries from
     private Store selectStore() {
         String selection = "";
 
@@ -172,14 +175,15 @@ public class App {
                 case "c":
                     return superstore;
                 default:
-                    System.out.println("Invalid choice. Please select again.");;
+                    System.out.println("Invalid selection. Please select again.");;
             }
         }
         return selectStore();
     }
 
 
-
+    //MODIFIES: this
+    //EFFECTS: To display all the available groceries in the selected store
     private void displayGroceries(List<Grocery> groceries) {
         System.out.println("Here are the available groceries in " + selectedstore.getStoreName());
         int i = 1;
@@ -190,9 +194,10 @@ public class App {
     }
 
 
-
-    private void addToCart(List<Grocery> groceries) {
-        System.out.println("Please select grocery to add to your cart (0 to cancel):");
+    //MODIFIES: this
+    //EFFECTS: To add the selected item into the shopping cart
+    private void addToShoppingCart(List<Grocery> groceries) {
+        System.out.println("Please select grocery to add to your cart:");
         int choice = input.nextInt();
         if (choice >= 1 && choice <= groceries.size()) {
             Grocery selectedGrocery = groceries.get(choice - 1); // zero-based indexing
@@ -200,11 +205,13 @@ public class App {
             selectedGrocery.setStore(selectedstore);
             System.out.println(selectedGrocery.getName() + " added to your shopping cart.");
         } else if (choice != 0) {
-            System.out.println("Invalid choice.");
+            System.out.println("Invalid selection. Please select again.");
         }
 
     }
 
+    //MODIFIES: this
+    //EFFECTS: To view the items in the shopping cart
     private void viewShoppingCart() {
 
         List<Grocery> items = cart.getItems();
@@ -222,11 +229,13 @@ public class App {
         }
     }
 
-
+    //REQUIRES: input = int
+    //MODIFIES: this
+    //EFFECTS: Remove a selected item from the shopping cart
     private void removeFromShoppingCart() {
         List<Grocery> items = cart.getItems();
 
-        System.out.println("Select the item you wish to remove from your cart (0 to cancel):");
+        System.out.println("Select the item you wish to remove from your cart:");
         viewShoppingCart();
         int choice = input.nextInt();
         if (items.isEmpty()) {
@@ -238,6 +247,7 @@ public class App {
             System.out.println(selectedGrocery.getName() + " is removed from your shopping cart.");
         } else {
             System.out.println("Item not found in your cart.");
+            removeFromShoppingCart();
 
         }
     }

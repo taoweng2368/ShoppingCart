@@ -90,4 +90,12 @@ public class StoreTest {
         List<Grocery> nullGroceries = walmart.getGroceriesByType("Null");
         assertEquals(0,nullGroceries.size());
     }
+
+    @Test
+    public void testGetGroceriesButNotEqualSameType() {
+        walmart.addGrocery(Milk);
+        List<Grocery> produceGroceries = walmart.getGroceriesByType("Produce");
+        assertEquals(0,produceGroceries.size());
+    }
+
 }
