@@ -1,0 +1,8 @@
+{
+    "stores": [],
+    "cart": [{
+        "price": 0.69,
+        "name": "Banana",
+        "type": "Produce"
+    }]
+}
