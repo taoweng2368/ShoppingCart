@@ -1,6 +1,10 @@
 package model;
 
-public class Grocery {
+import org.json.JSONObject;
+import persistence.Writable;
+
+// Represents a grocery
+public class Grocery implements Writable {
 
     private String name;
     private double price;
@@ -34,6 +38,22 @@ public class Grocery {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("type", type);
+        json.put("price", price);
+        return json;
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        this.name = json.getString("name");
+        this.type = json.getString("type");
+        this.price = json.getDouble("price");
     }
 
 

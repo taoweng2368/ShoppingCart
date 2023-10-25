@@ -1,9 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Store {
+// Represents a Store having an inventory of stocked products
+public class Store implements Writable {
     private String name; //name of the store
     private List<Grocery> inventory;  // inventory of the groceries in the store
 
@@ -40,7 +45,33 @@ public class Store {
         return name;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
 
+        JSONArray inventoryArray = new JSONArray();
+        for (Grocery grocery : inventory) {
+            inventoryArray.put(grocery.toJson());
+        }
+        json.put("inventory", inventoryArray);
+
+        return json;
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        this.name = json.getString("name");
+
+        JSONArray inventoryArray = json.getJSONArray("inventory");
+        inventory.clear();
+        for (Object inventoryJson : inventoryArray) {
+            JSONObject groceryJson = (JSONObject) inventoryJson;
+            Grocery grocery = new Grocery("", "", 0);
+            grocery.fromJson(groceryJson);
+            inventory.add(grocery);
+        }
+    }
 
 }
 

@@ -6,6 +6,15 @@ import model.Store;
 import java.util.List;
 import java.util.Scanner;
 
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 // Shopping cart application inspired by TellerApp https://github.students.cs.ubc.ca/CPSC210/TellerApp
 public class GroceryLyticsApp {
@@ -17,7 +26,12 @@ public class GroceryLyticsApp {
     private Store superstore;
     // Inputs
     private Scanner input;
+    // Json
+    private static final String JSON_STORE = "./data/shopping_cart.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
+    private List<Store> stores = new ArrayList<>();
 
     private Store selectedstore;
 
@@ -28,6 +42,8 @@ public class GroceryLyticsApp {
         walmart = new Store("Walmart");
         tnt = new Store("T&T");
         superstore = new Store("Superstore");
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         runApp();
     }
 
@@ -104,6 +120,8 @@ public class GroceryLyticsApp {
         System.out.println("\tc -> Dairy");
         System.out.println("\tv -> View Shopping Cart");
         System.out.println("\tr -> Remove Items from Shopping Cart");
+        System.out.println("\ts -> Save Shopping Cart to File");
+        System.out.println("\tl -> Load Shopping Cart from File");
         System.out.println("\tq -> Quit App");
     }
 
@@ -126,6 +144,12 @@ public class GroceryLyticsApp {
                 break;
             case "r":
                 removeFromShoppingCart();
+                break;
+            case "s":
+                saveDataToFile();
+                break;
+            case "l":
+                loadDataFromFile();
                 break;
             default:
                 System.out.println("Invalid selection. Please select again. ");
@@ -255,6 +279,29 @@ public class GroceryLyticsApp {
 
         }
     }
+
+    private void saveDataToFile() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(cart, stores);
+            jsonWriter.close();
+            System.out.println("Shopping cart data saved to file.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void loadDataFromFile() {
+        try {
+            jsonReader.read(cart, stores);
+            System.out.println("Shopping cart data loaded from file.");
+        } catch (IOException e) {
+            System.err.println("Error loading shopping cart data: " + e.getMessage());
+        }
+    }
+
 
 }
 
