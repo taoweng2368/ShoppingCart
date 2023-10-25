@@ -114,10 +114,8 @@ public class GroceryLyticsApp {
     // MODIFIES: this
     // EFFECTS: displays menu of grocery type options to user
     private void displayMenu() {
-        System.out.println("\nplease select the following grocery options:");
-        System.out.println("\ta -> Produce");
-        System.out.println("\tb -> Deli");
-        System.out.println("\tc -> Dairy");
+        System.out.println("\tWelcome to your Grocerlyrics. Please select from the following ");
+        System.out.println("\ta -> Grocery Selection");
         System.out.println("\tv -> View Shopping Cart");
         System.out.println("\tr -> Remove Items from Shopping Cart");
         System.out.println("\ts -> Save Shopping Cart to File");
@@ -125,10 +123,7 @@ public class GroceryLyticsApp {
         System.out.println("\tq -> Quit App");
     }
 
-
-    // MODIFIES: this
-    // EFFECTS: processes user command
-    private void processCommand(String command) {
+    private void processCommandGroceries(String command) {
         switch (command) {
             case "a":
                 selectGroceries("Produce");
@@ -138,6 +133,17 @@ public class GroceryLyticsApp {
                 break;
             case "c":
                 selectGroceries("Dairy");
+                break;
+        }
+    }
+
+
+    // MODIFIES: this
+    // EFFECTS: processes user command
+    private void processCommand(String command) {
+        switch (command) {
+            case "a":
+                processCommandGroceries(command);
                 break;
             case "v":
                 viewShoppingCart();
