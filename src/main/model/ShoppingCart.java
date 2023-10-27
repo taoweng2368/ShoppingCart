@@ -11,6 +11,7 @@ import java.util.List;
 // Represents a shopping cart having list of groceries in the cart
 public class ShoppingCart implements Writable {
     private List<Grocery> items;
+    private List<Store> stores;
 
 
     // EFFECTS: create a shopping cart
@@ -36,8 +37,8 @@ public class ShoppingCart implements Writable {
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-
         JSONArray itemsArray = new JSONArray();
+
         for (Grocery grocery : items) {
             itemsArray.put(grocery.toJson());
         }
@@ -46,19 +47,9 @@ public class ShoppingCart implements Writable {
         return json;
     }
 
-    @Override
-    public void fromJson(JSONObject json) {
-        JSONArray itemsArray = json.getJSONArray("items");
-        items.clear();
-        for (Object itemJson : itemsArray) {
-            JSONObject groceryJson = (JSONObject) itemJson;
-            Grocery grocery = new Grocery("", "", 0);
-            grocery.fromJson(groceryJson);
-            items.add(grocery);
-        }
+    public List<Store> getStores() {
+        return stores;
     }
-
-
 }
 
 

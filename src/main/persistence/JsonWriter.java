@@ -5,69 +5,50 @@ import model.ShoppingCart;
 import model.Store;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.*;
 import java.util.List;
 
-
+// JSON application inspired by https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+// Represents a writer that writes JSON representation of shoppingcart to file
 public class JsonWriter {
-    private String destination;
+    private static final int TAB = 4;
     private PrintWriter writer;
+    private String destination;
 
+    // EFFECTS: constructs writer to write to destination file
     public JsonWriter(String destination) {
         this.destination = destination;
     }
 
+    // MODIFIES: this
+    // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot
+    // be opened for writing
     public void open() throws FileNotFoundException {
         writer = new PrintWriter(new File(destination));
     }
 
+    // MODIFIES: this
+    // EFFECTS: writes JSON representation of workroom to file
+    public void write(ShoppingCart cart) {
+        JSONObject json = new JSONObject();
+        JSONArray cartArray = new JSONArray();
+        for (Grocery grocery : cart.getItems()) {
+            cartArray.put(grocery.toJson());
+        }
+        json.put("cart", cartArray);
+
+        saveToFile(json.toString(TAB));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: closes writer
     public void close() {
         writer.close();
     }
 
-    public void write(ShoppingCart cart, List<Store> stores) throws IOException {
-        JSONObject jsonObject = new JSONObject();
-        saveShoppingCart(cart, jsonObject);
-        saveStores(stores, jsonObject);
-
-        try (FileWriter fileWriter = new FileWriter(destination)) {
-            fileWriter.write(jsonObject.toString(4));
-        } catch (IOException e) {
-
-            throw e;
-        }
-    }
-
-    private void saveShoppingCart(ShoppingCart cart, JSONObject jsonObject) {
-        JSONArray cartArray = new JSONArray();
-        for (Grocery grocery : cart.getItems()) {
-            JSONObject groceryObject = new JSONObject();
-            groceryObject.put("name", grocery.getName());
-            groceryObject.put("price", grocery.getPrice());
-            groceryObject.put("type", grocery.getType());
-            cartArray.put(groceryObject);
-        }
-        jsonObject.put("cart", cartArray);
-    }
-
-    private void saveStores(List<Store> stores, JSONObject jsonObject) {
-        JSONArray storeArray = new JSONArray();
-        for (Store store : stores) {
-            JSONObject storeObject = new JSONObject();
-            storeObject.put("name", store.getStoreName());
-
-            JSONArray inventoryArray = new JSONArray();
-            for (Grocery grocery : store.getInventory()) {
-                JSONObject groceryObject = new JSONObject();
-                groceryObject.put("name", grocery.getName());
-                groceryObject.put("price", grocery.getPrice());
-                groceryObject.put("type", grocery.getType());
-                inventoryArray.put(groceryObject);
-            }
-            storeObject.put("inventory", inventoryArray);
-            storeArray.put(storeObject);
-        }
-        jsonObject.put("stores", storeArray);
+    // MODIFIES: this
+    // EFFECTS: writes string to file
+    private void saveToFile(String json) {
+        writer.print(json);
     }
 }

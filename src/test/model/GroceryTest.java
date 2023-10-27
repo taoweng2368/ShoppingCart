@@ -26,7 +26,6 @@ public class GroceryTest {
     // Test the constructor
     @Test
     public void testConstructor() {
-
         assertEquals("Banana",Banana.getName());
         assertEquals("Produce",Banana.getType());
         assertEquals(0.69,Banana.getPrice());

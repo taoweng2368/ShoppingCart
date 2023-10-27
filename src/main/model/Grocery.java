@@ -46,15 +46,10 @@ public class Grocery implements Writable {
         json.put("name", name);
         json.put("type", type);
         json.put("price", price);
+        json.put("store", store.toJson());
         return json;
     }
 
-    @Override
-    public void fromJson(JSONObject json) {
-        this.name = json.getString("name");
-        this.type = json.getString("type");
-        this.price = json.getDouble("price");
-    }
 
 
 }

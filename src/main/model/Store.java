@@ -1,6 +1,5 @@
 package model;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -49,28 +48,12 @@ public class Store implements Writable {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);
-
-        JSONArray inventoryArray = new JSONArray();
-        for (Grocery grocery : inventory) {
-            inventoryArray.put(grocery.toJson());
-        }
-        json.put("inventory", inventoryArray);
-
+//        JSONArray inventoryArray = new JSONArray();
+//        for (Grocery grocery : inventory) {
+//            inventoryArray.put(grocery.toJson());
+//        }
+//        json.put("inventory", inventoryArray);
         return json;
-    }
-
-    @Override
-    public void fromJson(JSONObject json) {
-        this.name = json.getString("name");
-
-        JSONArray inventoryArray = json.getJSONArray("inventory");
-        inventory.clear();
-        for (Object inventoryJson : inventoryArray) {
-            JSONObject groceryJson = (JSONObject) inventoryJson;
-            Grocery grocery = new Grocery("", "", 0);
-            grocery.fromJson(groceryJson);
-            inventory.add(grocery);
-        }
     }
 
 }
