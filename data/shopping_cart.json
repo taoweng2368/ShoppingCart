@@ -1,14 +1,6 @@
-{"cart": [
-    {
-        "price": 1.49,
-        "name": "Cabbage",
-        "store": {"name": "Walmart"},
-        "type": "Produce"
-    },
-    {
-        "price": 0.59,
-        "name": "Banana",
-        "store": {"name": "T&T"},
-        "type": "Produce"
-    }
-]}
+{"cart": [{
+    "price": 0.69,
+    "name": "Banana",
+    "store": {"name": "Walmart"},
+    "type": "Produce"
+}]}

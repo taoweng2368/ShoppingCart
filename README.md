@@ -42,6 +42,4 @@ However, this is not just for students, but for everybody.
 * As a user, I want to be able to save my shopping cart to file (if I so choose)
 * As a user, I want to be able to load my shopping cart from file (if I so choose)
 
-
-
   

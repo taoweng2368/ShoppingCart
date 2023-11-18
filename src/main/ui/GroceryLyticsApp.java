@@ -169,7 +169,7 @@ public class GroceryLyticsApp {
     //              - user is then given the option to add the selected grocery to the cart
     //              - if the store does not have the item in stock, it will prompt a message saying so
     //              - otherwise say "invalid selection and please select again"
-    private void selectGroceries(String grocerytype) {
+    protected void selectGroceries(String grocerytype) {
         selectedstore = selectStore();
 
         if (selectedstore != null) {
@@ -245,7 +245,7 @@ public class GroceryLyticsApp {
 
     // MODIFIES: this
     // EFFECTS: To view the items in the shopping cart
-    private void viewShoppingCart() {
+    protected void viewShoppingCart() {
 
         List<Grocery> items = cart.getItems();
 
@@ -268,7 +268,7 @@ public class GroceryLyticsApp {
     //         - if the cart is empty, say "the cart is empty" and prompt the user to buy
     //         - if the cart is not empty, user chooses the grocery to remove
     //         - otherwise, say "no item found in cart" and user try again
-    private void removeFromShoppingCart() {
+    protected void removeFromShoppingCart() {
         List<Grocery> items = cart.getItems();
         System.out.println("Select the item you wish to remove from your cart:");
         viewShoppingCart();
@@ -285,7 +285,7 @@ public class GroceryLyticsApp {
     }
 
     // EFFECTS: saves the shopping cart to file
-    private void saveShoppingCart() {
+    protected void saveShoppingCart() {
         try {
             jsonWriter.open();
             jsonWriter.write(cart);
@@ -298,7 +298,7 @@ public class GroceryLyticsApp {
 
     // MODIFIES: this
     // EFFECTS: loads shoppingcart from file
-    private void loadShoppingCart() {
+    protected void loadShoppingCart() {
         try {
             jsonReader.read(cart);
             System.out.println("Shopping cart data loaded from file: " + JSON_STORE);
