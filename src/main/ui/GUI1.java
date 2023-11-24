@@ -31,6 +31,8 @@ public class GUI1 extends JFrame implements ActionListener {
 
     private Store selectedstore;
 
+    JComboBox<String> cartComboBox = new JComboBox<>();
+
 
 
     private JPanel mainMenu;
@@ -59,26 +61,31 @@ public class GUI1 extends JFrame implements ActionListener {
     private JTextField t4;
     private JTextField t5;
 
+    private JTextArea cartTextArea;
+
 
     @SuppressWarnings("methodlength")
+    // Make a new JFrame
     public GUI1() {
         super("Grocerlytics");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(600, 600));
-        setMenu();
-        makeGrocerySelectionMenu();
-        makeShoppingCartMenu();
-
         cart = new ShoppingCart();
         walmart = new Store("Walmart");
         tnt = new Store("T&T");
         superstore = new Store("Superstore");
         jsonWriter = new JsonWriter(SHOPPINGCART_FILE);
         jsonReader = new JsonReader(SHOPPINGCART_FILE);
-
         initWalmart();
         initTnt();
         initSuperstore();
+
+        setMenu();
+        makeGrocerySelectionMenu();
+        makeShoppingCartMenu();
+
+
+
 
         welcomeLabel = new JLabel("Welcome to Grocerlytics");
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 40));
@@ -132,6 +139,7 @@ public class GUI1 extends JFrame implements ActionListener {
         superstore.addGrocery(new Grocery("Chicken", "Deli", 6.99));
     }
 
+    // EFFECTS: Make the main menu panel
     public void setMenu() {
         mainMenu = new JPanel();
         mainMenu.setBackground(Color.lightGray);
@@ -140,6 +148,7 @@ public class GUI1 extends JFrame implements ActionListener {
 
     }
 
+    // EFFECTS: set the buttons
     public void setButtons() {
         // For the main menu
         selectGroceriesbutton = new JButton("Select Groceries");
@@ -159,6 +168,7 @@ public class GUI1 extends JFrame implements ActionListener {
 
     }
 
+    // MODIFIES: this
     // EFFECTS: add the button to main menu
     public void addButton(JButton button, JPanel panel) {
         button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -170,7 +180,7 @@ public class GUI1 extends JFrame implements ActionListener {
         setResizable(false);
     }
 
-    // EFFECTS: calls the addbutton method on each argument
+    // EFFECTS: calls the addbutton method on each parameter
     public void addButtons() {
 
         addButton(selectGroceriesbutton, mainMenu);
@@ -187,6 +197,8 @@ public class GUI1 extends JFrame implements ActionListener {
         addButton(returnToMainMenuButton, cartMenu);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Sets each button to an action
     public void addActionToButtons() {
 
         selectGroceriesbutton.addActionListener(this);
@@ -237,18 +249,31 @@ public class GUI1 extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: Creates the shopping cart panel
     public void makeShoppingCartMenu() {
-        cartMenu = new JPanel(new GridLayout(2, 2));
+        cartMenu = new JPanel(new GridLayout(2, 1));
+        // Create a JComboBox to display the groceries in the shopping cart
 
-        JButton goBackButton = new JButton("Go Back to Main Menu");
-        JButton removeGroceryButton = new JButton("Remove Grocery");
+        // Set the font for the JComboBox
+        cartComboBox.setFont(new Font("Arial", Font.BOLD, 12));
 
-        cartMenu.add(new JLabel());
-        cartMenu.add(goBackButton);
-        cartMenu.add(new JLabel());
-        cartMenu.add(removeGroceryButton);
+        // Update the items in the cartComboBox based on the contents of the cart
+        updateCartComboBox(cartComboBox);
 
-        goBackButton.addActionListener(e -> setMenu());
-        removeGroceryButton.addActionListener(e -> removeGroceryFromCart());
+        cartMenu.add(cartComboBox);
+    }
+
+    // EFFECTS: to update the text in the cartTextArea based on the contents of the cart
+    private void updateCartComboBox(JComboBox<String> cartComboBox) {
+        List<Grocery> cartItems = cart.getItems();
+
+        if (cartItems.isEmpty()) {
+            cartComboBox.addItem("No items in the cart");
+        } else {
+            // Iterate over the items in the cart and add them to the cartComboBox
+            for (Grocery item : cartItems) {
+                String itemText = String.format("%s - $%.2f - %s", item.getName(), item.getPrice(), item.getStore().getStoreName());
+                cartComboBox.addItem(itemText);
+            }
+        }
     }
 
 
@@ -282,6 +307,7 @@ public class GUI1 extends JFrame implements ActionListener {
             if (selectedCartItem != null) {
                 int selectedIndex = Arrays.asList(cartOptions).indexOf(selectedCartItem);
                 Grocery removedGrocery = cartItems.remove(selectedIndex);
+                updateCartComboBox(cartComboBox);  // Update the cartComboBox after removal
                 JOptionPane.showMessageDialog(this, "Removed " + removedGrocery.getName() + " from the shopping cart!");
             }
         } else {
@@ -360,6 +386,8 @@ public class GUI1 extends JFrame implements ActionListener {
                     int selectedIndex = Arrays.asList(groceryOptions).indexOf(selectedGroceryOption);
                     Grocery selectedGrocery = availableGroceries.get(selectedIndex);
                     cart.addItem(selectedGrocery);
+                    selectedGrocery.setStore(selectedStore);
+                    updateCartComboBox(cartComboBox);
                     JOptionPane.showMessageDialog(this, "Added " + selectedGrocery.getName() + " to the shopping cart!");
                 }
             } else {
@@ -383,10 +411,9 @@ public class GUI1 extends JFrame implements ActionListener {
             jsonWriter.open();
             jsonWriter.write(cart);
             jsonWriter.close();
-            JOptionPane.showMessageDialog(this, "Shopping Cart saved successfully!");
+            JOptionPane.showMessageDialog(this, "Shopping cart data saved to file: " + SHOPPINGCART_FILE);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to write to file: " + SHOPPINGCART_FILE);
-
+            JOptionPane.showMessageDialog(this, "Unable to write to file: " + SHOPPINGCART_FILE);
         }
     }
 
@@ -396,13 +423,12 @@ public class GUI1 extends JFrame implements ActionListener {
     private void loadCart() {
         try {
             jsonReader.read(cart);
-            JOptionPane.showMessageDialog(this, "Shopping Cart loaded successfully!");
+            JOptionPane.showMessageDialog(this, "Shopping cart data loaded from file: " + SHOPPINGCART_FILE);
+            updateCartComboBox(cartComboBox);
         } catch (IOException e) {
-            items.setText("No items added");
+            JOptionPane.showMessageDialog(this, "Error loading shopping cart data: " + SHOPPINGCART_FILE);
         }
     }
-
-    // Inside your GUI1 class:
 
     // EFFECTS: Returns the Store object with the given name, or null if not found
     private Store getStoreByName(String storeName) {
@@ -418,7 +444,7 @@ public class GUI1 extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: available groceries based on the selected type and store
+    // EFFECTS: show available groceries based on the selected type and store
     private void showAvailableGroceries(JComboBox<String> groceryTypeComboBox, JComboBox<String> storeComboBox) {
         String selectedGroceryType = (String) groceryTypeComboBox.getSelectedItem();
         String selectedStoreName = (String) storeComboBox.getSelectedItem();
@@ -442,7 +468,7 @@ public class GUI1 extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: Sets all panels' visibility to false except for the main menu
+    // EFFECTS: Sets all panels visibility to false except for the main menu
     public void returnToMainMenu() {
         mainMenu.setVisible(true);
         grocerySelectionMenu.setVisible(false);
