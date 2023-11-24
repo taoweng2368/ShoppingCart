@@ -42,4 +42,37 @@ However, this is not just for students, but for everybody.
 * As a user, I want to be able to save my shopping cart to file (if I so choose)
 * As a user, I want to be able to load my shopping cart from file (if I so choose)
 
+
+## Instructions for Grader
+
+
+### Add Groceries:
+
+* User can add groceries by clicking on the "select groceries" button. 
+* Then User can choose desired Grocery type, desired Store.
+* Then User can click on the "Show Available Groceries" button to display all the available groceries in the store 
+at the moment.
+* Then User can choose to Add Grocery by clicking the "Add Grocery" button. It will then take the user to a panel 
+* choose their Grocery type, Store, and then are prompted to choose their grocery. If added, it will display a message
+staying that "Grocery" has been added. 
+
+### View Shopping Cart
+* The added groceries can be viewed in the Shopping Cart. 
+* User can click on the "View Cart" button to view their shopping cart.
+* Once clicked, the User will see their add groceries list on the top left box. 
+
+### Remove Groceries
+* If desired, the User can choose to remove a grocery in the cart.
+* The User can click on the "Remove Grocery" button, and it will prompt the User the choose the grocery that they
+want to remove. 
+* If there is no grocery in the cart, clicking the "Remove Grocery" button will display a message saying "No items
+in the shopping cart to remove".
+
+
+*Others*
+* Visual Component (main screen cart image) is added in GUI constructor
+
+* To save cart to file: press the save cart button
+* To load cart to file: press the load cart button
+
   

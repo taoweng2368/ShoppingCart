@@ -1,7 +1,5 @@
 package ui;
 
-import ui.gui.GroceryStartMenu;
-
 import javax.swing.*;
 import java.io.FileNotFoundException;
 

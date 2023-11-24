@@ -19,6 +19,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+// Represent the GUI class for the Grocery App
 public class GUI1 extends JFrame implements ActionListener {
 
     private static final String SHOPPINGCART_FILE = "./data/shopping_cart.json";
@@ -28,8 +30,6 @@ public class GUI1 extends JFrame implements ActionListener {
     private Store walmart;
     private Store tnt;
     private Store superstore;
-
-    private Store selectedstore;
 
     JComboBox<String> cartComboBox = new JComboBox<>();
 
@@ -54,14 +54,6 @@ public class GUI1 extends JFrame implements ActionListener {
 
     private JButton returnToMainMenuButton;
     private JButton returnButton;
-
-    private JTextField t1;
-    private JTextField t2;
-    private JTextField t3;
-    private JTextField t4;
-    private JTextField t5;
-
-    private JTextArea cartTextArea;
 
 
     @SuppressWarnings("methodlength")
@@ -90,8 +82,9 @@ public class GUI1 extends JFrame implements ActionListener {
         welcomeLabel = new JLabel("Welcome to Grocerlytics");
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 40));
         mainScreenImage = new JLabel();
-        mainScreenImage.setIcon(new ImageIcon("groceries.png"));
-        mainScreenImage.setMinimumSize(new Dimension(20, 20));
+        // Cart img from https://www.freeiconspng.com/img/28356
+        mainScreenImage.setIcon(new ImageIcon("cart.png"));
+        mainScreenImage.setMinimumSize(new Dimension(2, 5));
 
         mainMenu.add(welcomeLabel);
         mainMenu.add(mainScreenImage);
@@ -142,7 +135,7 @@ public class GUI1 extends JFrame implements ActionListener {
     // EFFECTS: Make the main menu panel
     public void setMenu() {
         mainMenu = new JPanel();
-        mainMenu.setBackground(Color.lightGray);
+        mainMenu.setBackground(Color.LIGHT_GRAY);
         add(mainMenu);
         items = new JLabel();
 
@@ -263,6 +256,9 @@ public class GUI1 extends JFrame implements ActionListener {
 
     // EFFECTS: to update the text in the cartTextArea based on the contents of the cart
     private void updateCartComboBox(JComboBox<String> cartComboBox) {
+
+        cartComboBox.removeAllItems();
+
         List<Grocery> cartItems = cart.getItems();
 
         if (cartItems.isEmpty()) {
@@ -270,7 +266,8 @@ public class GUI1 extends JFrame implements ActionListener {
         } else {
             // Iterate over the items in the cart and add them to the cartComboBox
             for (Grocery item : cartItems) {
-                String itemText = String.format("%s - $%.2f - %s", item.getName(), item.getPrice(), item.getStore().getStoreName());
+                String itemText = String.format("%s - $%.2f - %s", item.getName(), item.getPrice(),
+                        item.getStore().getStoreName());
                 cartComboBox.addItem(itemText);
             }
         }
@@ -297,7 +294,8 @@ public class GUI1 extends JFrame implements ActionListener {
             String[] cartOptions = new String[cartItems.size()];
             for (int i = 0; i < cartItems.size(); i++) {
                 Grocery grocery = cartItems.get(i);
-                cartOptions[i] = grocery.getName() + " - $" + grocery.getPrice() + " (" + grocery.getStore().getStoreName() + ")";
+                cartOptions[i] = grocery.getName() + " - $" + grocery.getPrice() + " ("
+                        + grocery.getStore().getStoreName() + ")";
             }
 
             String selectedCartItem = (String) JOptionPane.showInputDialog(this,
@@ -307,8 +305,10 @@ public class GUI1 extends JFrame implements ActionListener {
             if (selectedCartItem != null) {
                 int selectedIndex = Arrays.asList(cartOptions).indexOf(selectedCartItem);
                 Grocery removedGrocery = cartItems.remove(selectedIndex);
-                updateCartComboBox(cartComboBox);  // Update the cartComboBox after removal
-                JOptionPane.showMessageDialog(this, "Removed " + removedGrocery.getName() + " from the shopping cart!");
+                JOptionPane.showMessageDialog(this, "Removed " + removedGrocery.getName()
+                        + " from the shopping cart!");
+
+                updateCartComboBox(cartComboBox);
             }
         } else {
             JOptionPane.showMessageDialog(this, "No items in the shopping cart to remove.");
@@ -388,10 +388,12 @@ public class GUI1 extends JFrame implements ActionListener {
                     cart.addItem(selectedGrocery);
                     selectedGrocery.setStore(selectedStore);
                     updateCartComboBox(cartComboBox);
-                    JOptionPane.showMessageDialog(this, "Added " + selectedGrocery.getName() + " to the shopping cart!");
+                    JOptionPane.showMessageDialog(this, "Added " + selectedGrocery.getName()
+                            + " to the shopping cart!");
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Sorry, the groceries are not in stock at the moment.");
+                JOptionPane.showMessageDialog(this,
+                        "Sorry, the groceries are not in stock at the moment.");
             }
         }
     }
@@ -411,9 +413,11 @@ public class GUI1 extends JFrame implements ActionListener {
             jsonWriter.open();
             jsonWriter.write(cart);
             jsonWriter.close();
-            JOptionPane.showMessageDialog(this, "Shopping cart data saved to file: " + SHOPPINGCART_FILE);
+            JOptionPane.showMessageDialog(this, "Shopping cart data saved to file: "
+                    + SHOPPINGCART_FILE);
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Unable to write to file: " + SHOPPINGCART_FILE);
+            JOptionPane.showMessageDialog(this, "Unable to write to file: "
+                    + SHOPPINGCART_FILE);
         }
     }
 
@@ -423,10 +427,12 @@ public class GUI1 extends JFrame implements ActionListener {
     private void loadCart() {
         try {
             jsonReader.read(cart);
-            JOptionPane.showMessageDialog(this, "Shopping cart data loaded from file: " + SHOPPINGCART_FILE);
+            JOptionPane.showMessageDialog(this, "Shopping cart data loaded from file: "
+                    + SHOPPINGCART_FILE);
             updateCartComboBox(cartComboBox);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error loading shopping cart data: " + SHOPPINGCART_FILE);
+            JOptionPane.showMessageDialog(this, "Error loading shopping cart data: "
+                    + SHOPPINGCART_FILE);
         }
     }
 
@@ -463,7 +469,8 @@ public class GUI1 extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, availableGroceriesPanel, "Available Groceries",
                         JOptionPane.PLAIN_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(this, "Sorry, the groceries are not in stock at the moment.");
+                JOptionPane.showMessageDialog(this,
+                        "Sorry, the groceries are not in stock at the moment.");
             }
         }
     }
