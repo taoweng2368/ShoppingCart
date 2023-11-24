@@ -43,7 +43,7 @@ public class GrocerLyticsGUI extends JFrame {
         initSuperstore();
 
         initializeUI();
-        populateStores(); // You need to implement this method to populate the storeComboBox
+        populateStores();
     }
 
     @SuppressWarnings("methodlength")

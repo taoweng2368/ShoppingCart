@@ -1,111 +1,173 @@
 //package ui;
 //
 //import model.Grocery;
-//import model.Store;
+//import model.ShoppingCart;
 //
 //import javax.swing.*;
 //import java.awt.*;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
-//import java.util.List;
 //
 //public class GUI extends JFrame implements ActionListener {
-//    private GroceryLyticsApp groceryLyticsApp;
+//    private MainMenuController mainMenuController;
+//    private GrocerySelectionMenu grocerySelectionController;
+//    private SaveCartController saveCartController;
+//    private LoadCartController loadCartController;
 //
-//    private JPanel mainPanel;
-//    private JButton grocerySelectionButton;
-//    private JButton viewCartButton;
-//    private JButton removeItemButton;
-//    private JButton saveCartButton;
-//    private JButton loadCartButton;
-//    private JButton quitButton;
 //
-//    public GUI(GroceryLyticsApp grocerylyticsapp) {
-//        super("GroceryLytics");
-//        this.groceryLyticsApp = grocerylyticsapp;
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setSize(400, 300);
-//        setLocationRelativeTo(null);
+//    private JPanel mainMenu;
 //
+//    private ShoppingCart shoppingCart;
+//    private DefaultListModel<Grocery> cartListModel;
+//    private JPanel groceryPanel;
+//    private JPanel groceriesPanel;
+//
+//
+//
+//    public GUI() {
+//        super("Grocerlytics");
+//        setDefaultCloseOperation(EXIT_ON_CLOSE);
+//        setPreferredSize(new Dimension(600, 600));
+//
+//        initializeMenu();
+//        initializeActions();
+//        initializeControllers();
 //        initializeComponents();
 //
+//
+//        mainMenu.setVisible(true);
+//        pack();
+//        setLocationRelativeTo(null);
 //        setVisible(true);
+//        setResizable(false);
+//    }
+//
+//    private void initializeMenu() {
+//        mainMenu = new JPanel();
+//        mainMenu.setBackground(Color.lightGray);
+//        add(mainMenu);
+//    }
+//
+//
+//
+//    private void initializeControllers() {
+//        mainMenuController = new MainMenuController(this);
+//        grocerySelectionController = new GrocerySelectionMenu(this);
+//        saveCartController = new SaveCartController(this);
+//        loadCartController = new LoadCartController(this);
 //    }
 //
 //    private void initializeComponents() {
-//        mainPanel = new JPanel();
-//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+//        JLabel welcomelabel = new JLabel("Welcome to Grocerlytics!");
+//        welcomelabel.setIcon(new ImageIcon("groceries.png"));
+//        addLabel(welcomelabel);
 //
-//        grocerySelectionButton = createButton("Grocery Selection");
-//        viewCartButton = createButton("View Shopping Cart");
-//        removeItemButton = createButton("Remove Items from Shopping Cart");
-//        saveCartButton = createButton("Save Shopping Cart to File");
-//        loadCartButton = createButton("Load Shopping Cart from File");
-//        quitButton = createButton("Quit App");
 //
-//        addButtonsToPanel(grocerySelectionButton, viewCartButton, removeItemButton,
-//                saveCartButton, loadCartButton, quitButton);
-//
-//        add(mainPanel);
+//        mainMenuController.initializeMainMenuButtons();
+//        grocerySelectionController.initializeGrocerySelectionButton();
 //    }
 //
-//    private JButton createButton(String label) {
-//        JButton button = new JButton(label);
-//        button.addActionListener(this);
-//        return button;
+//    private void initializeActions() {
+//        mainMenuController.initializeActions();
+//        grocerySelectionController.initializeActions();
+//        saveCartController.initializeActions();
+//        loadCartController.initializeActions();
 //    }
 //
-//    private void addButtonsToPanel(JButton... buttons) {
-//        for (JButton button : buttons) {
-//            button.setAlignmentX(Component.CENTER_ALIGNMENT);
-//            mainPanel.add(button);
-//        }
+////    public void initializeMenuButtons() {
+////        button1 = new JButton("Search Groceries");
+////        button2 = new JButton("View Cart");
+////        button3 = new JButton("Save Cart");
+////        button4 = new JButton("Load Cart");
+////        button5 = new JButton("Exit Application");
+////    }
+//
+////    public void addButton(JButton button, JPanel panel) {
+////        button.setFont(new Font("Arial", Font.BOLD, 12));
+////        button.setBackground(Color.white);
+////        panel.add(button);
+////        pack();
+////        setLocationRelativeTo(null);
+////        setVisible(true);
+////        setResizable(false);
+////    }
+////
+////    // EFFECTS: Calls the addButton method for each argument
+////    public void addButtons(JButton button1, JButton button2, JButton button3, JButton button4,
+////                           JButton button5) {
+////
+////        addButton(button1, mainMenu);
+////        addButton(button2, mainMenu);
+////        addButton(button3, mainMenu);
+////        addButton(button4, mainMenu);
+////        addButton(button5, mainMenu);
+////    }
+//
+//
+//    public void addLabel(JLabel label) {
+//        label.setFont(new Font("Ariel", Font.BOLD, 30));
+//        mainMenu.add(label);
 //    }
 //
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        JButton source = (JButton) e.getSource();
 //
-//        if (source == grocerySelectionButton) {
-//            handleGrocerySelection();
-//        } else if (source == viewCartButton) {
-//            handleViewCart();
-//        } else if (source == removeItemButton) {
-//            handleRemoveItem();
-//        } else if (source == saveCartButton) {
-//            handleSaveCart();
-//        } else if (source == loadCartButton) {
-//            handleLoadCart();
-//        } else if (source == quitButton) {
-//            handleQuit();
-//        }
+//    // MODIFIES: this
+//    // EFFECTS: Sets each button to their respective action
+//    public void addActionToButton() {
+//
+////        searchGroceryAction();
+////        viewCartAction();
+////        saveAction();
+////        loadAction();
+////        exitAction();
 //    }
 //
-//    private void handleGrocerySelection() {
-//        String groceryType = JOptionPane.showInputDialog("Enter grocery type (Produce/Deli/Dairy):");
-//        groceryLyticsApp.selectGroceries(groceryType);
+//    public void addMenuButton(JButton button, JPanel panel) {
+//        button.setFont(new Font("Arial", Font.BOLD, 12));
+//        button.setBackground(Color.white);
+//        panel.add(button);
+//        pack();
+//        setLocationRelativeTo(null);
+//        setVisible(true);
+//        setResizable(false);
 //    }
 //
-//    private void handleViewCart() {
-//        groceryLyticsApp.viewShoppingCart();
+//    public ShoppingCart getShoppingCart() {
+//        // Assuming you have a method to get the shopping cart
+//        return shoppingCart;
 //    }
 //
-//    private void handleRemoveItem() {
-//        groceryLyticsApp.removeFromShoppingCart();
+//    public JPanel getMainMenu() {
+//        return mainMenu;
 //    }
 //
-//    private void handleSaveCart() {
-//        groceryLyticsApp.saveShoppingCart();
-//        JOptionPane.showMessageDialog(this, "Shopping cart saved successfully.");
+//    public JPanel getGroceryPanel() {
+//        return groceryPanel;
 //    }
 //
-//    private void handleLoadCart() {
-//        groceryLyticsApp.loadShoppingCart();
-//        JOptionPane.showMessageDialog(this, "Shopping cart loaded successfully.");
+//    public DefaultListModel<Grocery> getCartListModel() {
+//        return cartListModel;
 //    }
 //
-//    private void handleQuit() {
-//        groceryLyticsApp.saveShoppingCart();
-//        System.exit(0);
+//    // EFFECTS: Sets all panels' visibility to false except for the main menu
+//    public void returnToMainMenu() {
+//        mainMenu.setVisible(true);
+//        groceryPanel.setVisible(false);
 //    }
+//
+//    public void actionPerformed(ActionEvent ae) {
+//
+//    }
+//
+////    public void saveCartAction() {
+////        try {
+////            JsonWriter jsonWriter = new JsonWriter("shopping_cart.json");
+////            jsonWriter.open();
+////            jsonWriter.write(shoppingCart);
+////            jsonWriter.close();
+////            JOptionPane.showMessageDialog(this, "Shopping Cart saved successfully!");
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////            JOptionPane.showMessageDialog(this, "Error saving shopping cart!");
+////        }
+////    }
 //}
