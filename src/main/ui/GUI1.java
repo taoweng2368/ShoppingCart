@@ -4,6 +4,7 @@ import model.Grocery;
 import model.ShoppingCart;
 import model.Store;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -50,6 +51,7 @@ public class GUI1 extends JFrame implements ActionListener {
     private JButton removeButton;
 
     private JButton returnToMainMenuButton;
+    private JButton returnButton;
 
     private JTextField t1;
     private JTextField t2;
@@ -227,41 +229,30 @@ public class GUI1 extends JFrame implements ActionListener {
             removeGroceryFromCart();
         } else if (ae.getActionCommand().equals("Return")) {
             returnToMainMenu();
+        } else if (ae.getActionCommand().equals("Back")) {
+            returnToMainMenu();
         }
     }
 
     // MODIFIES: this
-// EFFECTS: Creates the shopping cart panel
-    private void makeShoppingCartMenu() {
-        cartMenu = new JPanel(new BorderLayout());
-        DefaultListModel<Grocery> cartListModel = new DefaultListModel<>();
-        JList<Grocery> cartList = new JList<>(cartListModel);
-        JScrollPane scrollPane = new JScrollPane(cartList);
+    // EFFECTS: Creates the shopping cart panel
+    public void makeShoppingCartMenu() {
+        cartMenu = new JPanel(new GridLayout(2, 2));
 
-        cartMenu.add(new JLabel("Shopping Cart"), BorderLayout.NORTH);
-        cartMenu.add(scrollPane, BorderLayout.CENTER);
+        JButton goBackButton = new JButton("Go Back to Main Menu");
+        JButton removeGroceryButton = new JButton("Remove Grocery");
 
-        JButton removeButton = new JButton("Remove Grocery");
-        cartMenu.add(removeButton, BorderLayout.SOUTH);
+        cartMenu.add(new JLabel());
+        cartMenu.add(goBackButton);
+        cartMenu.add(new JLabel());
+        cartMenu.add(removeGroceryButton);
 
-        removeButton.addActionListener(e -> {
-            List<Grocery> cartItems = cart.getItems();
-            if (cartItems.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Cart is empty.");
-                return;
-            }
-
-            int selectedIndex = cartList.getSelectedIndex();
-            if (selectedIndex != -1) {
-                Grocery selectedGrocery = cartItems.get(selectedIndex);
-                cart.removeItem(selectedGrocery);
-                cartListModel.removeElement(selectedGrocery);
-                JOptionPane.showMessageDialog(this, selectedGrocery.getName() + " removed from cart!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Please select a grocery to remove.");
-            }
-        });
+        goBackButton.addActionListener(e -> setMenu());
+        removeGroceryButton.addActionListener(e -> removeGroceryFromCart());
     }
+
+
+
 
     // EFFECTS: Add the shopping cart menu to the screen
     public void initializeCartMenu() {
@@ -273,63 +264,59 @@ public class GUI1 extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-// EFFECTS: Prompts the user to choose a grocery from the cart and removes it
+    // EFFECTS: Prompts the user to choose a grocery from the cart and removes it
     private void removeGroceryFromCart() {
         List<Grocery> cartItems = cart.getItems();
-        if (cartItems.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Cart is empty.");
-            return;
-        }
 
-        JComboBox<Grocery> groceryComboBox = new JComboBox<>(cartItems.toArray(new Grocery[0]));
-        JPanel panel = new JPanel(new GridLayout(2, 1));
-        panel.add(new JLabel("Choose Grocery to Remove:"));
-        panel.add(groceryComboBox);
+        if (!cartItems.isEmpty()) {
+            String[] cartOptions = new String[cartItems.size()];
+            for (int i = 0; i < cartItems.size(); i++) {
+                Grocery grocery = cartItems.get(i);
+                cartOptions[i] = grocery.getName() + " - $" + grocery.getPrice() + " (" + grocery.getStore().getStoreName() + ")";
+            }
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Remove Grocery",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            String selectedCartItem = (String) JOptionPane.showInputDialog(this,
+                    "Choose Grocery to Remove:", "Remove Grocery", JOptionPane.QUESTION_MESSAGE, null,
+                    cartOptions, cartOptions[0]);
 
-        if (result == JOptionPane.OK_OPTION) {
-            Grocery selectedGrocery = (Grocery) groceryComboBox.getSelectedItem();
-            cart.removeItem(selectedGrocery);
-            JOptionPane.showMessageDialog(this, selectedGrocery.getName() + " removed from cart!");
+            if (selectedCartItem != null) {
+                int selectedIndex = Arrays.asList(cartOptions).indexOf(selectedCartItem);
+                Grocery removedGrocery = cartItems.remove(selectedIndex);
+                JOptionPane.showMessageDialog(this, "Removed " + removedGrocery.getName() + " from the shopping cart!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No items in the shopping cart to remove.");
         }
     }
 
 
+
     // MODIFIES: this
-// EFFECTS: Creates a panel that displays the option for the user to choose their groceries
-    private void makeGrocerySelectionMenu() {
+    // EFFECTS: Creates a panel that displays the option for the user to choose their groceries
+    public void makeGrocerySelectionMenu() {
         grocerySelectionMenu = new JPanel(new GridLayout(4, 2));
 
-        grocerySelectionMenu.add(new JLabel("Choose Grocery Type:"));
-        JComboBox<String> typeComboBox = new JComboBox<>(new String[]{"Produce", "Deli", "Dairy"});
-        grocerySelectionMenu.add(typeComboBox);
+        JLabel chooseGroceryTypeLabel = new JLabel("Choose Grocery Type:");
+        JComboBox<String> groceryTypeComboBox = new JComboBox<>(new String[]{"Produce", "Deli", "Dairy"});
 
-        grocerySelectionMenu.add(new JLabel("Choose Store:"));
+        JLabel chooseStoreLabel = new JLabel("Choose Store:");
         JComboBox<String> storeComboBox = new JComboBox<>(new String[]{"Walmart", "T&T", "Superstore"});
-        grocerySelectionMenu.add(storeComboBox);
 
         JButton showAvailableGroceriesButton = new JButton("Show Available Groceries");
+
+        grocerySelectionMenu.add(chooseGroceryTypeLabel);
+        grocerySelectionMenu.add(groceryTypeComboBox);
+        grocerySelectionMenu.add(chooseStoreLabel);
+        grocerySelectionMenu.add(storeComboBox);
         grocerySelectionMenu.add(showAvailableGroceriesButton);
 
-        showAvailableGroceriesButton.addActionListener(e -> {
-            String selectedType = (String) typeComboBox.getSelectedItem();
-            String selectedStoreName = (String) storeComboBox.getSelectedItem();
+        showAvailableGroceriesButton.addActionListener(e -> showAvailableGroceries(groceryTypeComboBox, storeComboBox));
 
-            // Fetch the selected store based on the name
-            selectedstore = getStoreByName(selectedStoreName);
+        returnButton = new JButton("Back");
+        grocerySelectionMenu.add(returnButton);
 
-            // Fetch and display available groceries based on selected type and store
-            List<Grocery> availableGroceries = getAvailableGroceries(selectedType, selectedstore);
-
-            // Display available groceries in a new dialog
-            StringBuilder message = new StringBuilder("Available Groceries:\n");
-            for (Grocery grocery : availableGroceries) {
-                message.append(grocery.getName()).append(" - $").append(grocery.getPrice()).append("\n");
-            }
-            JOptionPane.showMessageDialog(this, message.toString());
-        });
+        returnButton.addActionListener(this);
+        returnButton.setActionCommand("Back");
     }
 
     // MODIFIES: this
@@ -345,46 +332,43 @@ public class GUI1 extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: Prompts the user to choose a grocery type, store, and then add a grocery to the shopping cart
     private void addGroceryToCart() {
-        String[] groceryTypes = {"Produce", "Deli", "Dairy"}; // Add more types as needed
-        String[] storeNames = {"Walmart", "T&T", "Superstore"}; // Add more stores as needed
+        String groceryType = (String) JOptionPane.showInputDialog(this, "Choose Grocery Type:",
+                "Grocery Type Selection", JOptionPane.QUESTION_MESSAGE, null,
+                new String[]{"Produce", "Deli", "Dairy"}, "Produce");
 
-        JComboBox<String> typeComboBox = new JComboBox<>(groceryTypes);
-        JComboBox<String> storeComboBox = new JComboBox<>(storeNames);
+        String[] storeNames = {"Walmart", "T&T", "Superstore"};
+        String selectedStoreName = (String) JOptionPane.showInputDialog(this, "Choose Store:",
+                "Store Selection", JOptionPane.QUESTION_MESSAGE, null,
+                storeNames, "Walmart");
 
-        JPanel panel = new JPanel(new GridLayout(3, 2));
-        panel.add(new JLabel("Choose Grocery Type:"));
-        panel.add(typeComboBox);
-        panel.add(new JLabel("Choose Store:"));
-        panel.add(storeComboBox);
+        Store selectedStore = getStoreByName(selectedStoreName);
+        if (selectedStore != null) {
+            List<Grocery> availableGroceries = selectedStore.getGroceriesByType(groceryType);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Select Grocery and Store",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (!availableGroceries.isEmpty()) {
+                String[] groceryOptions = new String[availableGroceries.size()];
+                for (int i = 0; i < availableGroceries.size(); i++) {
+                    Grocery grocery = availableGroceries.get(i);
+                    groceryOptions[i] = grocery.getName() + " - $" + grocery.getPrice();
+                }
 
-        if (result == JOptionPane.OK_OPTION) {
-            String selectedType = (String) typeComboBox.getSelectedItem();
-            String selectedStoreName = (String) storeComboBox.getSelectedItem();
+                String selectedGroceryOption = (String) JOptionPane.showInputDialog(this,
+                        "Choose Grocery:", "Grocery Selection", JOptionPane.QUESTION_MESSAGE, null,
+                        groceryOptions, groceryOptions[0]);
 
-            // Fetch the selected store based on the name
-            selectedstore = getStoreByName(selectedStoreName);
-
-            // Fetch and display available groceries based on selected type and store
-            List<Grocery> availableGroceries = getAvailableGroceries(selectedType, selectedstore);
-
-            JComboBox<Grocery> groceryComboBox = new JComboBox<>(availableGroceries.toArray(new Grocery[0]));
-            panel.removeAll();
-            panel.add(new JLabel("Choose Grocery:"));
-            panel.add(groceryComboBox);
-
-            result = JOptionPane.showConfirmDialog(null, panel, "Select Grocery",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-            if (result == JOptionPane.OK_OPTION) {
-                Grocery selectedGrocery = (Grocery) groceryComboBox.getSelectedItem();
-                cart.addItem(selectedGrocery);
-                JOptionPane.showMessageDialog(this, selectedGrocery.getName() + " added to cart!");
+                if (selectedGroceryOption != null) {
+                    int selectedIndex = Arrays.asList(groceryOptions).indexOf(selectedGroceryOption);
+                    Grocery selectedGrocery = availableGroceries.get(selectedIndex);
+                    cart.addItem(selectedGrocery);
+                    JOptionPane.showMessageDialog(this, "Added " + selectedGrocery.getName() + " to the shopping cart!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Sorry, the groceries are not in stock at the moment.");
             }
         }
     }
+
+
 
 
 
@@ -434,21 +418,28 @@ public class GUI1 extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: Returns a list of available groceries based on the selected type and store
-    private List<Grocery> getAvailableGroceries(String selectedType, Store selectedstore) {
-        List<Grocery> availableGroceries = new ArrayList<>();
+    // EFFECTS: available groceries based on the selected type and store
+    private void showAvailableGroceries(JComboBox<String> groceryTypeComboBox, JComboBox<String> storeComboBox) {
+        String selectedGroceryType = (String) groceryTypeComboBox.getSelectedItem();
+        String selectedStoreName = (String) storeComboBox.getSelectedItem();
 
-        if (selectedstore != null) {
-            List<Grocery> groceriesInStore = selectedstore.getGroceriesByType(selectedType);
-            for (Grocery grocery : groceriesInStore) {
-                // Check if the grocery is not already in the cart
-                if (!cart.getItems().contains(grocery)) {
-                    availableGroceries.add(grocery);
+        Store selectedStore = getStoreByName(selectedStoreName);
+        if (selectedStore != null) {
+            List<Grocery> availableGroceries = selectedStore.getGroceriesByType(selectedGroceryType);
+
+            if (!availableGroceries.isEmpty()) {
+                JPanel availableGroceriesPanel = new JPanel(new GridLayout(availableGroceries.size(), 1));
+                for (Grocery grocery : availableGroceries) {
+                    JLabel groceryLabel = new JLabel(grocery.getName() + " - $" + grocery.getPrice());
+                    availableGroceriesPanel.add(groceryLabel);
                 }
+
+                JOptionPane.showMessageDialog(this, availableGroceriesPanel, "Available Groceries",
+                        JOptionPane.PLAIN_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Sorry, the groceries are not in stock at the moment.");
             }
         }
-
-        return availableGroceries;
     }
 
     // EFFECTS: Sets all panels' visibility to false except for the main menu
