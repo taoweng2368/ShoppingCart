@@ -272,7 +272,6 @@ public class GUI1 extends JFrame implements ActionListener {
         if (cartItems.isEmpty()) {
             cartComboBox.addItem("No items in the cart");
         } else {
-            // Iterate over the items in the cart and add them to the cartComboBox
             for (Grocery item : cartItems) {
                 String itemText = String.format("%s - $%.2f - %s", item.getName(), item.getPrice(),
                         item.getStore().getStoreName());
@@ -280,9 +279,6 @@ public class GUI1 extends JFrame implements ActionListener {
             }
         }
     }
-
-
-
 
     // EFFECTS: Add the shopping cart menu to the screen
     public void initializeCartMenu() {
