@@ -10,11 +10,5 @@
         "name": "Banana",
         "store": {"name": "Walmart"},
         "type": "Produce"
-    },
-    {
-        "price": 0.69,
-        "name": "Banana",
-        "store": {"name": "Walmart"},
-        "type": "Produce"
     }
 ]}
