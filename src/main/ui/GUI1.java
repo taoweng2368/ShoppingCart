@@ -4,7 +4,6 @@ import model.Grocery;
 import model.ShoppingCart;
 import model.Store;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -366,34 +365,25 @@ public class GUI1 extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS: Prompts the user to choose a grocery type, store, and then add a grocery to the shopping cart
     private void addGroceryToCart() {
-        String groceryType = promptUser("Choose Grocery Type:", "Grocery Type Selection",
-                "Produce", "Deli", "Dairy");
-
-        ArrayList<String> storeNames = new ArrayList<>(Arrays.asList("Walmart", "T&T", "Superstore"));
-        String selectedStoreName = promptUser("Choose Store:", "Store Selection",
-                storeNames.toArray(new String[0]));
+        String groceryType = promptUserForInput("Choose Grocery Type:",
+                "Grocery Type Selection", "Produce", "Deli", "Dairy");
+        String selectedStoreName = promptUserForInput("Choose Store:",
+                "Store Selection", "Walmart", "T&T", "Superstore");
 
         Store selectedStore = getStoreByName(selectedStoreName);
         if (selectedStore != null) {
             List<Grocery> availableGroceries = selectedStore.getGroceriesByType(groceryType);
 
             if (!availableGroceries.isEmpty()) {
-                ArrayList<String> groceryOptions = new ArrayList<>();
-                for (Grocery grocery : availableGroceries) {
-                    groceryOptions.add(grocery.getName() + " - $" + grocery.getPrice());
-                }
+                Grocery selectedGrocery = promptUserForGrocerySelection("Choose Grocery:",
+                        "Grocery Selection", availableGroceries);
 
-                String selectedGroceryOption = promptUser("Choose Grocery:", "Grocery Selection",
-                        groceryOptions.toArray(new String[0]));
-
-                if (selectedGroceryOption != null) {
-                    int selectedIndex = groceryOptions.indexOf(selectedGroceryOption);
-                    Grocery selectedGrocery = availableGroceries.get(selectedIndex);
+                if (selectedGrocery != null) {
                     cart.addItem(selectedGrocery);
                     selectedGrocery.setStore(selectedStore);
                     updateCartComboBox(cartComboBox);
-                    JOptionPane.showMessageDialog(this, "Added " + selectedGrocery.getName()
-                            + " to the shopping cart!");
+                    JOptionPane.showMessageDialog(this, "Added "
+                            + selectedGrocery.getName() + " to the shopping cart!");
                 }
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -402,22 +392,40 @@ public class GUI1 extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: For showing input dialog
-    private String promptUser(String message, String title, String... options) {
+    // EFFECTS: Return a Grocery from user selection
+    private Grocery promptUserForGrocerySelection(String message, String title, List<Grocery> groceries) {
+        List<String> groceryOptions = createGroceryOptions(groceries);
+        String selectedGroceryOption = promptUserForInput(message, title, groceryOptions.toArray(new String[0]));
+
+        if (selectedGroceryOption != null) {
+            int selectedIndex = groceryOptions.indexOf(selectedGroceryOption);
+            return groceries.get(selectedIndex);
+        }
+
+        return null;
+    }
+
+    // EFFECTS: Return a list of grocery options
+    private List<String> createGroceryOptions(List<Grocery> groceries) {
+        List<String> groceryOptions = new ArrayList<>();
+        for (Grocery grocery : groceries) {
+            groceryOptions.add(grocery.getName() + " - $" + grocery.getPrice());
+        }
+        return groceryOptions;
+    }
+
+    // EFFECTS: Return a string for showing input dialog
+    private String promptUserForInput(String message, String title, String... options) {
         return (String) JOptionPane.showInputDialog(this, message, title,
                 JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
     }
-
-
-
-
-
 
 
     // SAVE AND LOAD METHODS:
 
     // MODIFIES: this
     // EFFECTS: save the cart file if it exists
+    // otherwise, error message
     private void saveCart() {
         try {
             jsonWriter.open();
@@ -433,7 +441,7 @@ public class GUI1 extends JFrame implements ActionListener {
 
     // MODIFIES: this
     // EFFECTS: load the cart file if it exists
-    // otherwise, error
+    // otherwise, error message
     private void loadCart() {
         try {
             jsonReader.read(cart);
