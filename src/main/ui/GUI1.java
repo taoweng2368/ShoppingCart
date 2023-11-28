@@ -241,23 +241,36 @@ public class GUI1 extends JFrame implements ActionListener {
 
         if (ae.getActionCommand().equals("Select Groceries")) {
             initializeGrocerySelectionMenu();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("View Cart")) {
             initializeCartMenu();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Save Cart")) {
             saveCart();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Load Cart")) {
             loadCart();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Exit App")) {
+            printLoggedEvents();
             System.exit(0);
         } else if (ae.getActionCommand().equals("Add Grocery")) {
             addGroceryToCart();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Remove Grocery")) {
             removeGroceryFromCart();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Return")) {
             returnToMainMenu();
+            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Back")) {
             returnToMainMenu();
+            logEvent("User selected groceries");
         }
+    }
+
+    private void logEvent(String description) {
+        EventLog.getInstance().logEvent(new Event(description));
     }
 
     // MODIFIES: this
@@ -439,9 +452,11 @@ public class GUI1 extends JFrame implements ActionListener {
             jsonWriter.close();
             JOptionPane.showMessageDialog(this, "Shopping cart data saved to file: "
                     + SHOPPINGCART_FILE);
+            logEvent("Shopping cart data saved to file: " + SHOPPINGCART_FILE);
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Unable to write to file: "
                     + SHOPPINGCART_FILE);
+            logEvent("Unable to write to file: " + SHOPPINGCART_FILE);
         }
     }
 
@@ -453,10 +468,20 @@ public class GUI1 extends JFrame implements ActionListener {
             jsonReader.read(cart);
             JOptionPane.showMessageDialog(this, "Shopping cart data loaded from file: "
                     + SHOPPINGCART_FILE);
+            logEvent("Shopping cart data loaded from file: " + SHOPPINGCART_FILE);
             updateCartComboBox(cartComboBox);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error loading shopping cart data: "
                     + SHOPPINGCART_FILE);
+            logEvent("Error loading shopping cart data: " + SHOPPINGCART_FILE);
+        }
+    }
+
+    // Add a method to print logged events when the application is exited
+    private void printLoggedEvents() {
+        System.out.println("Events logged since the application started:");
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event);
         }
     }
 
