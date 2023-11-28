@@ -241,7 +241,7 @@ public class GUI1 extends JFrame implements ActionListener {
 
         if (ae.getActionCommand().equals("Select Groceries")) {
             initializeGrocerySelectionMenu();
-            logEvent("User selected groceries");
+            logEvent("User selected a grocery");
         } else if (ae.getActionCommand().equals("View Cart")) {
             initializeCartMenu();
             logEvent("User viewed cart");

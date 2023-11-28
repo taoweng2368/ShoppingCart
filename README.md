@@ -75,4 +75,27 @@ in the shopping cart to remove".
 * To save cart to file: press the save cart button
 * To load cart to file: press the load cart button
 
+## Phase 4: Task 2
+
+### Sample representative of events:
+Events logged since the application started:
+
+* Mon Nov 27 18:48:32 PST 2023 
+* User selected a grocery
+* Mon Nov 27 18:48:36 PST 2023
+* User added a grocery
+* Mon Nov 27 18:48:36 PST 2023
+* User returned to main menu
+* Mon Nov 27 18:48:37 PST 2023
+* User viewed cart
+* Mon Nov 27 18:48:40 PST 2023
+* User removed a grocery
+* Mon Nov 27 18:48:40 PST 2023
+* User returned to main menu
+* Mon Nov 27 18:48:44 PST 2023
+* Shopping cart data saved to file: ./data/shopping_cart.json
+* Mon Nov 27 18:48:46 PST 2023
+* Shopping cart data loaded from file: ./data/shopping_cart.json
+* Mon Nov 27 18:48:47 PST 2023
+* User has exited the App
   
