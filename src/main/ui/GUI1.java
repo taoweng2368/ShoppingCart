@@ -1,5 +1,6 @@
 package ui;
 
+import model.EventLog;
 import model.Grocery;
 import model.ShoppingCart;
 import model.Store;
@@ -7,6 +8,7 @@ import model.Store;
 import java.util.List;
 import java.util.ArrayList;
 
+import model.exception.LogException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -17,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static java.awt.SystemColor.desktop;
 
 
 // Represent the GUI class for the Grocery App
@@ -170,6 +174,9 @@ public class GUI1 extends JFrame implements ActionListener {
         // In general
         returnToMainMenuButton = new JButton("Back");
 
+        // EventLog
+
+
     }
 
     // MODIFIES: this
@@ -199,6 +206,8 @@ public class GUI1 extends JFrame implements ActionListener {
 
         addButton(returnToMainMenuButton, grocerySelectionMenu);
         addButton(returnToMainMenuButton, cartMenu);
+
+
     }
 
     // MODIFIES: this
@@ -224,6 +233,7 @@ public class GUI1 extends JFrame implements ActionListener {
 
         returnToMainMenuButton.addActionListener(this);
         returnToMainMenuButton.setActionCommand("Return");
+
     }
 
     // EFFECTS: calls the given methods when a certain button is clicked on

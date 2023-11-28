@@ -1,14 +1,6 @@
-{"cart": [
-    {
-        "price": 5.99,
-        "name": "Pork",
-        "store": {"name": "Walmart"},
-        "type": "Deli"
-    },
-    {
-        "price": 4.99,
-        "name": "Pork",
-        "store": {"name": "Superstore"},
-        "type": "Deli"
-    }
-]}
+{"cart": [{
+    "price": 0.69,
+    "name": "Banana",
+    "store": {"name": "Walmart"},
+    "type": "Produce"
+}]}
