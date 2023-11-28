@@ -244,33 +244,39 @@ public class GUI1 extends JFrame implements ActionListener {
             logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("View Cart")) {
             initializeCartMenu();
-            logEvent("User selected groceries");
+            logEvent("User viewed cart");
         } else if (ae.getActionCommand().equals("Save Cart")) {
             saveCart();
-            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Load Cart")) {
             loadCart();
-            logEvent("User selected groceries");
         } else if (ae.getActionCommand().equals("Exit App")) {
+            logEvent("User has exited the App");
             printLoggedEvents();
             System.exit(0);
-        } else if (ae.getActionCommand().equals("Add Grocery")) {
+        }
+        actionPerformedExtend(ae);
+    }
+
+    // EFFECTS: calls the given methods when a certain button is clicked on
+    public void actionPerformedExtend(ActionEvent ae) {
+        if (ae.getActionCommand().equals("Add Grocery")) {
             addGroceryToCart();
-            logEvent("User selected groceries");
+            logEvent("User added a grocery");
         } else if (ae.getActionCommand().equals("Remove Grocery")) {
             removeGroceryFromCart();
-            logEvent("User selected groceries");
+            logEvent("User removed a grocery");
         } else if (ae.getActionCommand().equals("Return")) {
             returnToMainMenu();
-            logEvent("User selected groceries");
+            logEvent("User returned to main menu");
         } else if (ae.getActionCommand().equals("Back")) {
             returnToMainMenu();
-            logEvent("User selected groceries");
+            logEvent("User returned to main menu");
         }
     }
 
+    // EFFECTS: log event with string description
     private void logEvent(String description) {
-        EventLog.getInstance().logEvent(new Event(description));
+        EventLog.getInstance().logEvent(new model.Event(description));
     }
 
     // MODIFIES: this
@@ -480,7 +486,7 @@ public class GUI1 extends JFrame implements ActionListener {
     // Add a method to print logged events when the application is exited
     private void printLoggedEvents() {
         System.out.println("Events logged since the application started:");
-        for (Event event : EventLog.getInstance()) {
+        for (model.Event event : EventLog.getInstance()) {
             System.out.println(event);
         }
     }
