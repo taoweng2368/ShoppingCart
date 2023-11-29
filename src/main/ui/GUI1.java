@@ -8,7 +8,6 @@ import model.Store;
 import java.util.List;
 import java.util.ArrayList;
 
-import model.exception.LogException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -19,8 +18,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import static java.awt.SystemColor.desktop;
 
 
 // Represent the GUI class for the Grocery App
@@ -483,7 +480,7 @@ public class GUI1 extends JFrame implements ActionListener {
         }
     }
 
-    // Add a method to print logged events when the application is exited
+    // EFFECTS: Print logged events when the application is exited
     private void printLoggedEvents() {
         System.out.println("Events logged since the application started:");
         for (model.Event event : EventLog.getInstance()) {
