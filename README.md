@@ -98,4 +98,13 @@ Events logged since the application started:
 * Shopping cart data loaded from file: ./data/shopping_cart.json
 * Mon Nov 27 18:48:47 PST 2023
 * User has exited the App
+
+
+## Phase 4: Task 3
+
+### Refactoring:
+
+For refactoring, I could have made separate classes for the elements in the GUI class, instead of have everything 
+inside of one GUI class. Also, I could have made some methods in my GUI class shorter by refactoring; making helper 
+methods.
   
